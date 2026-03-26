@@ -38,15 +38,4 @@ export class HomePage extends BasePage {
       .find("span");
   }
 
-  static get notCustomerLink() {
-    return cy.get("a[routerlink='/register'");
-  }
-
-  static generateEmail() {
-    return "email_" + Math.floor(Math.random() * 9999).toString() + "@ebox.com";
-  }
-
-  static get registerEmailInput() {
-    return cy.get("input#emailControl")
-  }
 }
