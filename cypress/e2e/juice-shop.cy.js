@@ -1,5 +1,11 @@
+import { BasketPage } from "../pageObjects/basketPage";
+import { DeliveryMethodPage } from "../pageObjects/deliveryMethodPage";
 import { HomePage } from "../pageObjects/homePage";
+import { OrderCompletionPage } from "../pageObjects/orderCompletionPage";
+import { OrderSummaryPage } from "../pageObjects/orderSummaryPage";
+import { PaymentOptionsPage } from "../pageObjects/paymentOptionsPage";
 import { RegistrationPage } from "../pageObjects/registrationPage";
+import { SelectAddressPage } from "../pageObjects/selectAddressPage";
 
 describe('Juice-shop scenarios', () => {
   context('Without auto login', () => {
@@ -73,6 +79,7 @@ describe('Juice-shop scenarios', () => {
     beforeEach(() => {
       cy.login('demo', 'demo');
       HomePage.visit();
+      HomePage.forcePageReloadLink.click();
     });
 
     it('Search and validate Lemon', () => {
@@ -81,9 +88,11 @@ describe('Juice-shop scenarios', () => {
       // Search for Lemon
       HomePage.searchField.type("Lemon{enter}");
       // Select a product card - Lemon Juice (500ml)
-      HomePage.lemonCard.click();
+      HomePage.productCards
+        .contains("Lemon Juice (500ml)")
+        .click();
       // Validate that the card (should) contains "Sour but full of vitamins."
-      HomePage.lemonDialog
+      HomePage.dialogCard
         .should("contain.text", "Sour but full of vitamins.");
     });
 
@@ -114,7 +123,7 @@ describe('Juice-shop scenarios', () => {
         .click();
       // Validate that the card (should) contains "Now with even more exotic flavour."
       HomePage.dialogCard
-        .should("have.text", "Now with even more exotic flavour.");
+        .should("contain.text", "Now with even more exotic flavour.");
       // Close the card
       HomePage.closeButton.click();
       // Select a product card - Lemon Juice (500ml)
@@ -123,7 +132,7 @@ describe('Juice-shop scenarios', () => {
         .click();
       // Validate that the card (should) contains "Sour but full of vitamins."
       HomePage.dialogCard
-        .should("have.text", "Sour but full of vitamins.");
+        .should("contain.text", "Sour but full of vitamins.");
       // Close the card
       HomePage.closeButton.click();
       // Select a product card - Strawberry Juice (500ml)
@@ -132,7 +141,7 @@ describe('Juice-shop scenarios', () => {
         .click();
       // Validate that the card (should) contains "Sweet & tasty!"
       HomePage.dialogCard
-        .should("have.text", "Sweet & tasty!");
+        .should("contain.text", "Sweet & tasty!");
     });
 
     // Create scenario - Read a review
@@ -156,7 +165,7 @@ describe('Juice-shop scenarios', () => {
     });
 
     // Create scenario - Add a review
-    it.only('Add a review', () => {
+    it('Add a review', () => {
       // Click on search icon
       HomePage.navbarSearchButton.click();
       // Search for Raspberry
@@ -180,55 +189,99 @@ describe('Juice-shop scenarios', () => {
     })
 
     // Create scenario - Validate product card amount
-    // Validate that the default amount of cards is 12
-    // Change items per page (at the bottom of page) to 24
-    // Validate that the amount of cards is 24
-    // Change items per page (at the bottom of page) to 36
-    // Validate that the amount of cards is 35
+    it('Validate product card amount', () => {
+      // Validate that the default amount of cards is 12
+      HomePage.paginator.should("have.text", "12");
+      // Change items per page (at the bottom of page) to 24
+      HomePage.paginator.click();
+
+      HomePage.paginatorOptions
+        .contains("24")
+        .click();
+      // Validate that the amount of cards is 24
+      HomePage.paginator.should("have.text", "24");
+      // Change items per page (at the bottom of page) to 36
+      HomePage.paginator.click();
+      HomePage.paginatorOptions
+        .contains("36")
+        .click();
+      // Validate that the amount of cards is 35
+      HomePage.paginator.should("have.text", "36");
+    });
+
 
     // Create scenario - Buy Girlie T-shirt
-    // Click on search icon
-    // Search for Girlie
-    // Add to basket "Girlie"
-    // Click on "Your Basket" button
-    // Create page object - BasketPage
-    // Click on "Checkout" button
-    // Create page object - SelectAddressPage
-    // Select address containing "United Fakedom"
-    // Click Continue button
-    // Create page object - DeliveryMethodPage
-    // Select delivery speed Standard Delivery
-    // Click Continue button
-    // Create page object - PaymentOptionsPage
-    // Select card that ends with "5678"
-    // Click Continue button
-    // Create page object - OrderSummaryPage
-    // Click on "Place your order and pay"
-    // Create page object - OrderCompletionPage
-    // Validate confirmation - "Thank you for your purchase!"
+    it('Buy Girlie T-shirt', () => {
+      // Click on search icon
+      HomePage.navbarSearchButton.click();
+      // Search for Girlie
+      HomePage.searchField.type("Girlie{enter}");
+      // Add to basket "Girlie" Click on "Your Basket" button Create page object - BasketPage Click on "Checkout" button
+      HomePage.addToBasketButton.click();
+      HomePage.navbarBasket.click();
+      BasketPage.checkoutButton.click();
+      // Create page object - SelectAddressPage
+      // Select address containing "United Fakedom"
+      SelectAddressPage.addressRows
+        .contains("United Fakedom")
+        .click();
+      // Click Continue button
+      SelectAddressPage.continueButton.click();
+      // Create page object - DeliveryMethodPage
+      // Select delivery speed Standard Delivery
+      DeliveryMethodPage.deliveryOptions
+        .contains("Standard Delivery")
+        .click();
+      // Click Continue button
+      DeliveryMethodPage.continueButton.click();
+      // Create page object - PaymentOptionsPage
+      // Select card that ends with "5678"
+      PaymentOptionsPage.cardOptions
+        .contains("5678")
+        .parent()
+        .find("mat-cell mat-radio-button")
+        .click();
+      // Click Continue button
+      PaymentOptionsPage.continueButton.click();
+      // Create page object - OrderSummaryPage
+      // Click on "Place your order and pay"
+      OrderSummaryPage.placeOrderAndPayButton.click();
+      // Create page object - OrderCompletionPage
+      // Validate confirmation - "Thank you for your purchase!"
+      OrderCompletionPage.thankYouText
+        .should("have.text", "Thank you for your purchase!");
+    })
+
 
     // Create scenario - Add address
-    // Click on Account
-    // Click on Orders & Payment
-    // Click on My saved addresses
-    // Create page object - SavedAddressesPage
-    // Click on Add New Address
-    // Create page object - CreateAddressPage
-    // Fill in the necessary information
-    // Click Submit button
-    // Validate that previously added address is visible
+    it('Add address', () => {
+      // Click on Account
+      HomePage.navbarAccountButton.click();
+      // Click on Orders & Payment
+      // Click on My saved addresses
+      // Create page object - SavedAddressesPage
+      // Click on Add New Address
+      // Create page object - CreateAddressPage
+      // Fill in the necessary information
+      // Click Submit button
+      // Validate that previously added address is visible
+
+    });
 
     // Create scenario - Add payment option
-    // Click on Account
-    // Click on Orders & Payment
-    // Click on My payment options
-    // Create page object - SavedPaymentMethodsPage
-    // Click Add new card
-    // Fill in Name
-    // Fill in Card Number
-    // Set expiry month to 7
-    // Set expiry year to 2090
-    // Click Submit button
-    // Validate that the card shows up in the list
+    it('Add payment option', () => {
+
+      // Click on Account
+      // Click on Orders & Payment
+      // Click on My payment options
+      // Create page object - SavedPaymentMethodsPage
+      // Click Add new card
+      // Fill in Name
+      // Fill in Card Number
+      // Set expiry month to 7
+      // Set expiry year to 2090
+      // Click Submit button
+      // Validate that the card shows up in the list
+    });
   });
 });

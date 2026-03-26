@@ -13,6 +13,10 @@ export class HomePage extends BasePage {
     return cy.get("[aria-label='dismiss cookie message']");
   }
 
+  static get forcePageReloadLink() {
+    return cy.get("span").contains("Force page reload");
+  }
+
   static get navbarAccountButton() {
     return cy.get("button#navbarAccount");
   }
@@ -76,5 +80,21 @@ export class HomePage extends BasePage {
 
   static get submitButton() {
     return cy.get("button#submitButton");
+  }
+
+  static get paginator() {
+    return cy.get(".mat-mdc-paginator-page-size-select");
+  }
+
+  static get paginatorOptions() {
+    return cy.get("[role='option']");
+  }
+
+  static get addToBasketButton() {
+    return cy.get("button[aria-label='Add to Basket']");
+  }
+
+  static get navbarBasket() {
+    return cy.get("button[routerlink='/basket']");
   }
 }
