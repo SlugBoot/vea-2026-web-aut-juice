@@ -35,10 +35,18 @@ export class HomePage extends BasePage {
 
   static get accountName() {
     return cy.get("button[aria-label='Go to user profile']")
-      .find("span")
+      .find("span");
   }
 
-  static accountNameCheck(name) {
-    return this.accountName.should("contain.text", name);
+  static get notCustomerLink() {
+    return cy.get("a[routerlink='/register'");
+  }
+
+  static generateEmail() {
+    return "email_" + Math.floor(Math.random() * 9999).toString() + "@ebox.com";
+  }
+
+  static get registerEmailInput() {
+    return cy.get("input#emailControl")
   }
 }

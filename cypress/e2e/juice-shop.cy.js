@@ -23,15 +23,19 @@ describe('Juice-shop scenarios', () => {
       // Click Account button
       HomePage.navbarAccountButton.click();
       // Validate that "demo" account name appears in the menu section
-      HomePage.accountNameCheck("demo");
+      HomePage.accountName.should("contain.text", "demo");
     });
 
     it('Registration', () => {
       // Click Account button
+      HomePage.navbarAccountButton.click();
       // Login button
+      HomePage.navbarLoginButton.click();
       // Click "Not yet a customer?"
+      HomePage.notCustomerLink.click();
       // Find - how to generate random number in JS
       // Use that number to genarate unique email address, e.g.: email_7584@ebox.com
+
       // Save that email address to some variable
       // Fill in password field and repeat password field with same password
       // Click on Security Question menu
