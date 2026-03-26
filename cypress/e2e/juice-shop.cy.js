@@ -1,10 +1,12 @@
 import { BasketPage } from "../pageObjects/basketPage";
+import { CreateAddressPage } from "../pageObjects/createAddressPage";
 import { DeliveryMethodPage } from "../pageObjects/deliveryMethodPage";
 import { HomePage } from "../pageObjects/homePage";
 import { OrderCompletionPage } from "../pageObjects/orderCompletionPage";
 import { OrderSummaryPage } from "../pageObjects/orderSummaryPage";
 import { PaymentOptionsPage } from "../pageObjects/paymentOptionsPage";
 import { RegistrationPage } from "../pageObjects/registrationPage";
+import { SavedAddressesPage } from "../pageObjects/savedAddressesPage";
 import { SelectAddressPage } from "../pageObjects/selectAddressPage";
 
 describe('Juice-shop scenarios', () => {
@@ -258,14 +260,48 @@ describe('Juice-shop scenarios', () => {
       // Click on Account
       HomePage.navbarAccountButton.click();
       // Click on Orders & Payment
+      HomePage.ordersAndPaymentOption.click();
       // Click on My saved addresses
+      HomePage.mySavedAddressesOption.click();
       // Create page object - SavedAddressesPage
       // Click on Add New Address
+      SavedAddressesPage.addNewAddressButton.click();
       // Create page object - CreateAddressPage
       // Fill in the necessary information
-      // Click Submit button
-      // Validate that previously added address is visible
+      const formInformation = {
+        country: "Latvia",
+        name: "John Bringus",
+        mobile_no: "29202010",
+        zip_code: "LV3604",
+        address: "Talsu iela 240",
+        city: "Ventspils",
+        state: "Liquid"
+      }
 
+      CreateAddressPage.countryInput.type(formInformation.country);
+      CreateAddressPage.nameInput.type(formInformation.name);
+      CreateAddressPage.mobileNumberInput.type(formInformation.mobile_no);
+      CreateAddressPage.zipCodeInput.type(formInformation.zip_code);
+      CreateAddressPage.addressInput.type(formInformation.address);
+      CreateAddressPage.cityInput.type(formInformation.city);
+      CreateAddressPage.stateInput.type(formInformation.state);
+      // Click Submit button
+      CreateAddressPage.submitButton.click();
+      // Validate that previously added address is visible
+      SavedAddressesPage.addresses
+        .contains(formInformation.name)
+        .should("contain.text", formInformation.name);
+
+      SavedAddressesPage.addresses
+        .contains(formInformation.address)
+        .should("contain.text", formInformation.address
+          + ", " + formInformation.city
+          + ", " + formInformation.state
+          + ", " + formInformation.zip_code);
+
+      SavedAddressesPage.addresses
+        .contains(formInformation.country)
+        .should("contain.text", formInformation.country);
     });
 
     // Create scenario - Add payment option

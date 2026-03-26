@@ -97,4 +97,12 @@ export class HomePage extends BasePage {
   static get navbarBasket() {
     return cy.get("button[routerlink='/basket']");
   }
+
+  static get ordersAndPaymentOption() {
+    return cy.get("button[aria-label='Show Orders and Payment Menu']");
+  }
+
+  static get mySavedAddressesOption() {
+    return cy.get("button[routerlink='/address/saved']");
+  }
 }
