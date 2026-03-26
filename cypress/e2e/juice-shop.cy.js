@@ -136,7 +136,7 @@ describe('Juice-shop scenarios', () => {
     });
 
     // Create scenario - Read a review
-    it.only('Read a review', () => {
+    it('Read a review', () => {
       // Click on search icon
       HomePage.navbarSearchButton.click();
       // Search for King
@@ -155,16 +155,28 @@ describe('Juice-shop scenarios', () => {
 
     });
 
-
     // Create scenario - Add a review
     it.only('Add a review', () => {
       // Click on search icon
+      HomePage.navbarSearchButton.click();
       // Search for Raspberry
+      HomePage.searchField.type("Raspberry{enter}");
       // Select a product card - Raspberry Juice (1000ml)
+      HomePage.productCards
+        .contains("Raspberry Juice (1000ml)")
+        .click();
       // Type in review - "Tastes like metal"
+      const review = "Tastes like metal";
+      HomePage.reviewInput
+        .type(review);
       // Click Submit
+      HomePage.submitButton.click();
       // Click expand reviews button/icon (wait for reviews to appear)
+      HomePage.reviewsButton.click();
       // Validate review -  "Tastes like metal"
+      HomePage.reviews
+        .contains(review)
+        .should("have.text", review);
     })
 
     // Create scenario - Validate product card amount

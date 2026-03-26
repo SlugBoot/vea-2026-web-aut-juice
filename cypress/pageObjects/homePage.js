@@ -68,4 +68,13 @@ export class HomePage extends BasePage {
     return this.dialogCard
       .find(".comment");
   }
+
+  static get reviewInput() {
+    return this.dialogCard
+      .find("textarea[matinput]");
+  }
+
+  static get submitButton() {
+    return cy.get("button#submitButton");
+  }
 }
