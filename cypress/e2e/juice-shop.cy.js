@@ -7,6 +7,7 @@ import { OrderSummaryPage } from "../pageObjects/orderSummaryPage";
 import { PaymentOptionsPage } from "../pageObjects/paymentOptionsPage";
 import { RegistrationPage } from "../pageObjects/registrationPage";
 import { SavedAddressesPage } from "../pageObjects/savedAddressesPage";
+import { SavedPaymentMethodsPage } from "../pageObjects/savedPaymentMethodsPage";
 import { SelectAddressPage } from "../pageObjects/selectAddressPage";
 
 describe('Juice-shop scenarios', () => {
@@ -306,18 +307,35 @@ describe('Juice-shop scenarios', () => {
 
     // Create scenario - Add payment option
     it('Add payment option', () => {
-
       // Click on Account
+      const testData = {
+        name: "Robert Robertson",
+        card_number: "1234567890123456"
+      };
+
+      HomePage.navbarAccountButton.click();
       // Click on Orders & Payment
+      HomePage.ordersAndPaymentOption.click();
       // Click on My payment options
+      HomePage.myPaymentOptionsOption.click();
       // Create page object - SavedPaymentMethodsPage
       // Click Add new card
+      SavedPaymentMethodsPage.addNewCardPanel.click();
       // Fill in Name
+      SavedPaymentMethodsPage.nameInput.type(testData.name);
       // Fill in Card Number
+      SavedPaymentMethodsPage.cardNumberInput.type(testData.card_number);
       // Set expiry month to 7
+      SavedPaymentMethodsPage.expiryMonthDropdown.select("7");
       // Set expiry year to 2090
+      SavedPaymentMethodsPage.expiryYearDropdown.select("2090");
       // Click Submit button
+      SavedPaymentMethodsPage.submitButton.click();
       // Validate that the card shows up in the list
+      SavedPaymentMethodsPage.savedMethods
+        .contains(testData.name)
+        .parent()
+        .should("contain.text", testData.name);
     });
   });
 });
