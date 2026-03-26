@@ -38,4 +38,34 @@ export class HomePage extends BasePage {
       .find("span");
   }
 
+  static get navbarSearchButton() {
+    return cy.get("app-mat-search-bar");
+  }
+
+  static get searchField() {
+    return cy.get("input[id*='mat-input']");
+  }
+
+  static get productCards() {
+    return cy.get("div.mdc-card");
+  }
+
+  static get dialogCard() {
+    return cy.get("mat-dialog-content")
+  }
+
+  static get closeButton() {
+    return cy.get(".close-dialog");
+  }
+
+  static get reviewsButton() {
+    return this.dialogCard
+      .find("mat-panel-title span")
+      .contains("Reviews");
+  }
+
+  static get reviews() {
+    return this.dialogCard
+      .find(".comment");
+  }
 }
