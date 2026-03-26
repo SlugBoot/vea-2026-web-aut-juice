@@ -1,4 +1,4 @@
-import { HomePage } from '../pageObjects/HomePage';
+import { HomePage } from "../pageObjects/homePage";
 
 describe('Juice-shop scenarios', () => {
   context('Without auto login', () => {
@@ -8,14 +8,22 @@ describe('Juice-shop scenarios', () => {
       HomePage.meWantItButton.click();
     });
 
-    it('Login', () => {
+    it.only('Login', () => {
       // Click Account button
+      HomePage.navbarAccountButton.click();
       // Click Login button
+      HomePage.navbarLoginButton.click();
       // Set email value to "demo"
+      HomePage.emailInput.type("demo");
       // Set password value to "demo"
+      HomePage.passwordInput.type("demo");
       // Click Log in
+      HomePage.loginButton.should("not.have.class", "mat-mdc-button-disabled");
+      HomePage.loginButton.click();
       // Click Account button
+      HomePage.navbarAccountButton.click();
       // Validate that "demo" account name appears in the menu section
+      HomePage.accountNameCheck("demo");
     });
 
     it('Registration', () => {
